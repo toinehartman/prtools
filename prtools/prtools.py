@@ -1696,15 +1696,15 @@ def boomerangs(n=100):
     N = genclass(n, p)
     t = numpy.pi * (-0.5 + numpy.random.rand(N[0],1))
 
-    xa = 0.5*numpy.cos(t)           + 0.025*numpy.random.randn(N[0],1);
-    ya = 0.5*numpy.sin(t)           + 0.025*numpy.random.randn(N[0],1);
-    za = numpy.sin(2*xa)*numpy.cos(2*ya) + 0.025*numpy.random.randn(N[0],1);
+    xa = 0.5*numpy.cos(t)           + 0.025*numpy.random.randn(N[0],1)
+    ya = 0.5*numpy.sin(t)           + 0.025*numpy.random.randn(N[0],1)
+    za = numpy.sin(2*xa)*numpy.cos(2*ya) + 0.025*numpy.random.randn(N[0],1)
 
-    t = numpy.pi * (0.5 + numpy.random.rand(N[1],1));
+    t = numpy.pi * (0.5 + numpy.random.rand(N[1],1))
 
-    xb = 0.25 + 0.5*numpy.cos(t)    + 0.025*numpy.random.randn(N[1],1);
-    yb = 0.50 + 0.5*numpy.sin(t)    + 0.025*numpy.random.randn(N[1],1);
-    zb = numpy.sin(2*xb)*numpy.cos(2*yb) + 0.025*numpy.random.randn(N[1],1);
+    xb = 0.25 + 0.5*numpy.cos(t)    + 0.025*numpy.random.randn(N[1],1)
+    yb = 0.50 + 0.5*numpy.sin(t)    + 0.025*numpy.random.randn(N[1],1)
+    zb = numpy.sin(2*xb)*numpy.cos(2*yb) + 0.025*numpy.random.randn(N[1],1)
 
     xa = numpy.concatenate((xa,ya,za),axis=1)
     xb = numpy.concatenate((xb,yb,zb),axis=1)
