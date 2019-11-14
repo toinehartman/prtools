@@ -16,9 +16,13 @@ from .dataset import prdataset
 class prmapping(object):
     "Prmapping in Python"
 
-    def __init__(self,mapping_func,x=[],hyperp=[]):
+    def __init__(self, mapping_func, x=None, hyperp=None):
         # exception: when only hyperp are given
-        if (not isinstance(x,prdataset)) and (not hyperp): 
+        if x is None:
+            x = []
+        if hyperp is None:
+            hyperp = []
+        if (not isinstance(x,prdataset)) and (not hyperp):
             hyperp = x
             x = []
         self.mapping_func = mapping_func
@@ -232,7 +236,9 @@ def sequentialm(task=None,x=None,w=None):
 
 # === useful functions =====================================
 
-def plotc(f,levels=[0.0],colors=None,gridsize = 30):
+def plotc(f, levels=None, colors=None, gridsize = 30):
+    if levels is None:
+        levels = [0.0]
     ax = plt.gca()
     if colors is None:
         colors = next(ax._get_lines.prop_cycler)['color']

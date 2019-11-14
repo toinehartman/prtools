@@ -1345,7 +1345,9 @@ def prcrossval(a,u,k=10,nrrep=1,testfunc=testc):
             e[:,i:(i+1)] = prcrossval(a,u,k,1)
     return e
 
-def cleval(a,u,trainsize=[2,3,5,10,20,30],nrreps=3,testfunc=testc):
+def cleval(a, u, trainsize=None, nrreps=3, testfunc=testc):
+    if trainsize is None:
+        trainsize = [2, 3, 5, 10, 20, 30]
     nrcl = a.nrclasses()
     clsz = a.classsizes()
     if (numpy.max(trainsize)>=numpy.min(clsz)):
