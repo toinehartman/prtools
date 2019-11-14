@@ -1364,11 +1364,11 @@ def cleval(a, u, trainsize=None, nrreps=3, testfunc=testc):
             err[i,f] = z*w*testfunc()
             err_app[i,f] = x*w*testfunc()
     # show it?
-    h = plt.errorbar(trainsize,numpy.mean(err,axis=1),numpy.std(err,axis=1),\
-            label=u.name)
+    h = plt.errorbar(trainsize,numpy.mean(err,axis=1),numpy.std(err,axis=1),
+                     label=u.name)
     thiscolor = h[0].get_color()
-    plt.errorbar(trainsize,numpy.mean(err_app,axis=1),numpy.std(err_app,axis=1),\
-            fmt='--',color=thiscolor)
+    plt.errorbar(trainsize,numpy.mean(err_app,axis=1),numpy.std(err_app,axis=1),
+                 fmt='--',color=thiscolor)
     plt.xlabel('Nr. train objects per class')
     plt.ylabel('Error')
     plt.title('Learning curve %s' % a.name)
@@ -1386,11 +1386,11 @@ def clevalf(a,u,trainsize=0.6,nrreps=5,testfunc=testc):
             err[i,f] = z*w*testfunc()
             err_app[i,f] = x*w*testfunc()
     # show it?
-    h = plt.errorbar(range(dim),numpy.mean(err,axis=1),numpy.std(err,axis=1),\
-            label=u.name)
+    h = plt.errorbar(range(dim),numpy.mean(err,axis=1),numpy.std(err,axis=1),
+                     label=u.name)
     thiscolor = h[0].get_color()
-    plt.errorbar(range(dim),numpy.mean(err_app,axis=1),numpy.std(err_app,axis=1),\
-            fmt='--',color=thiscolor)
+    plt.errorbar(range(dim),numpy.mean(err_app,axis=1),numpy.std(err_app,axis=1),
+                 fmt='--',color=thiscolor)
     plt.xlabel('Feature dimensionality')
     plt.ylabel('Error')
     plt.title('Feature curve %s' % a.name)
