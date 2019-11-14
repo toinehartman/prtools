@@ -30,18 +30,18 @@ def getUCIdata(name,N,dim,getOnline=False):
         except:
             labx[i] = thislab
         i += 1
-        if (i>=N):
+        if i>=N:
             break
     a = dataset.prdataset(x,labx)
     return a
 
 def missingvalues(a,val):
     if isinstance(val,str):
-        if (val=='remove'):
+        if val== 'remove':
             suma = numpy.sum(+a,axis=1)
             I = numpy.nonzero(~numpy.isnan(suma))
             a = a[I[0],:]
-        elif (val=='mean'):
+        elif val== 'mean':
             dat = +a
             suma = numpy.sum(dat,axis=0)
             I = numpy.nonzero(numpy.isnan(suma))[0]

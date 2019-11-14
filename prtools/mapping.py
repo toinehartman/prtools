@@ -39,11 +39,11 @@ class prmapping(object):
         return "prmapping("+self.name+","+self.mapping_type+")"
     def __str__(self):
         outstr = ""
-        if (len(self.name)>0):
+        if len(self.name)>0:
             outstr = "%s, " % self.name
-        if (self.mapping_type=="untrained"):
+        if self.mapping_type== "untrained":
             outstr += "untrained mapping"
-        elif (self.mapping_type=="trained"):
+        elif self.mapping_type== "trained":
             outstr += "%d to %d trained mapping" % (self.shape[0],self.shape[1])
         else:
             raise ValueError('Mapping type is not defined.')
@@ -51,9 +51,9 @@ class prmapping(object):
 
     def shape(self,I=None):
         if I is not None:
-            if (I==0):
+            if I==0:
                 return self.shape[0]
-            elif (I==1):
+            elif I==1:
                 return self.shape[1]
             else:
                 raise ValueError('Only dim=0,1 are possible.')
@@ -69,7 +69,7 @@ class prmapping(object):
 
     def train(self,x,args=None):
         # train
-        if (self.mapping_type=="trained"):
+        if self.mapping_type== "trained":
             raise ValueError('The mapping is already trained and will be retrained.')
         # maybe the supplied parameters overrule the stored ones:
         if args is not None:
@@ -81,7 +81,7 @@ class prmapping(object):
 
         self.mapping_type = 'trained'
         # set the input and output sizes 
-        if (hasattr(x,'shape')):  # combiners do not eat datasets
+        if hasattr(x, 'shape'):  # combiners do not eat datasets
             self.shape[0] = x.shape[1]
             # and the output size?
             xx = +x[:1,:]   # hmmm??
@@ -91,7 +91,7 @@ class prmapping(object):
 
     def eval(self,x):
         # evaluate
-        if (self.mapping_type=="untrained"):
+        if self.mapping_type== "untrained":
             raise ValueError('The mapping is not trained and cannot be evaluated.')
         # not a good idea to supply the true targets?
         # but it is needed for testc!
@@ -102,12 +102,12 @@ class prmapping(object):
         #else:
         newx = copy.deepcopy(x)
         out = self.mapping_func("eval",newx,self)
-        if ((len(self.targets)>0) and (out.shape[1] != len(self.targets))):
+        if (len(self.targets) > 0) and (out.shape[1] != len(self.targets)):
             print(out.shape)
             print(self.targets)
             print(len(self.targets))
             raise ValueError('Output of mapping does not match number of targets.')
-        if (len(self.targets)>0):
+        if len(self.targets)>0:
             if not isinstance(x,prdataset):
                 newx = prdataset(newx)
             newx.featlab = self.targets
@@ -118,11 +118,11 @@ class prmapping(object):
         return newx
 
     def __call__(self,x):
-        if (self.mapping_type=="untrained"):
+        if self.mapping_type== "untrained":
             # train
             out = self.train(x)
             return out
-        elif (self.mapping_type=="trained"):
+        elif self.mapping_type== "trained":
             # evaluate
             out = self.eval(x)
             return out
@@ -134,7 +134,7 @@ class prmapping(object):
         #print('prmapping multiplication with right')
         #print('   self='+str(self))
         #print('   other='+str(other))
-        if (isinstance(other,prmapping)):
+        if isinstance(other, prmapping):
             # we get a sequential mapping
             leftm = copy.deepcopy(self)
             rightm = copy.deepcopy(other)
@@ -148,7 +148,7 @@ class prmapping(object):
             raise ValueError('Prmapping times something not defined.')
 
     def __rmul__(self,other):
-        if (isinstance(other,prdataset)):
+        if isinstance(other, prdataset):
             #print('prmapping multiplication with left')
             #print('   self='+str(self))
             #print('   other='+str(other))
@@ -199,23 +199,23 @@ def sequentialm(task=None,x=None,w=None):
                 w = prmapping(sequentialm,newm,newx)
             w.name = newm[0].name+'+'+newm[1].name
             return w
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             mapname = 'Sequential'
         else:
             mapname = x[0].name+'+'+x[1].name
         return mapname, x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         u = copy.deepcopy(w)  # I hate Python..
         x1 = copy.deepcopy(x) # Did I say that I hate Python??
-        if (u[0].mapping_type=='untrained'):
+        if u[0].mapping_type== 'untrained':
             neww = u[0].train(x1)
             u = (neww, u[1])
         newx = copy.deepcopy(x1)
         x2 = u[0](newx)
-        if (u[1].mapping_type=='untrained'):
+        if u[1].mapping_type== 'untrained':
             neww = u[1].train(x2)
             u = (u[0],neww)
         # fix the targets:
@@ -225,7 +225,7 @@ def sequentialm(task=None,x=None,w=None):
         else:
             targets = u[1].targets
         return u, targets
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data   # get the parameters out
         return W[1](W[0](x))
@@ -251,7 +251,7 @@ def plotc(f, levels=None, colors=None, gridsize = 30):
     X0.shape = (gridsize*gridsize, 1)
     X1.shape = (gridsize*gridsize, 1)
     dat = numpy.hstack((X0,X1))
-    if (f.shape[0]>2):
+    if f.shape[0]>2:
         print("PLOTC: Mapping is >2D, set remaining inputs to 0.")
         X2 = numpy.zeros((gridsize*gridsize,f.shape[0]-2))
         dat = numpy.hstack((dat,X2))
@@ -272,7 +272,7 @@ def plotm(f,nrlevels=10,colors=None,gridsize = 30):
     dx = (xl[1]-xl[0])/(gridsize-1)
     x = numpy.arange(xl[0],xl[1]+0.01*dx,dx)
 
-    if (f.shape[0]==1):
+    if f.shape[0]==1:
         x.shape = (gridsize,1)
         plt.plot(x,+f(x))
         return
@@ -284,7 +284,7 @@ def plotm(f,nrlevels=10,colors=None,gridsize = 30):
     X0.shape = (gridsize*gridsize, 1)
     X1.shape = (gridsize*gridsize, 1)
     dat = numpy.hstack((X0,X1))
-    if (f.shape[0]>2):
+    if f.shape[0]>2:
         print("PLOTM: Mapping is >2D, set remaining inputs to 0.")
         X2 = numpy.zeros((gridsize*gridsize,f.shape[0]-2))
         dat = numpy.hstack((dat,X2))

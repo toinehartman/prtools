@@ -26,9 +26,9 @@ class prdataset(object):
         if targets is not None:
             if not isinstance(targets,(numpy.ndarray, numpy.generic)):
                 raise ValueError('Target vector should be a numpy matrix.')
-            if (data.shape[0]!=targets.shape[0]):
+            if data.shape[0]!=targets.shape[0]:
                 raise ValueError('Number of targets does not match number of data samples.')
-            if (len(targets.shape)<2):
+            if len(targets.shape)<2:
                 targets = targets[:,numpy.newaxis]  # SIGH
         else:
             targets = numpy.zeros(data.shape[0])
@@ -44,15 +44,15 @@ class prdataset(object):
 
     def __str__(self):
         sz = self.data.shape
-        if (len(self.name)>0):
+        if len(self.name)>0:
             outstr = "%s %d by %d prdataset" % (self.name,sz[0],sz[1])
         else:
             outstr = "%d by %d prdataset" % (sz[0],sz[1])
         cnt = self.classsizes()
         nrcl = len(cnt)
-        if (nrcl==0):
+        if nrcl==0:
             outstr += " with no targets"
-        elif (nrcl==1):
+        elif nrcl==1:
             outstr += " with 1 class: [%d]"%sz[0]
         else:
             outstr += " with %d classes: [%d"%(nrcl,cnt[0])
@@ -67,13 +67,13 @@ class prdataset(object):
         return self.float()
     def __add__(self,other):
         newd = copy.deepcopy(self)
-        if (isinstance(other,prdataset)):
+        if isinstance(other, prdataset):
             other = other.float()
         newd.data += other
         return newd
     def __sub__(self,other):
         newd = copy.deepcopy(self)
-        if (isinstance(other,prdataset)):
+        if isinstance(other, prdataset):
             other = other.float()
         newd.data -= other
         return newd
@@ -82,9 +82,9 @@ class prdataset(object):
         #print('   self='+str(self))
         #print('   other='+str(other))
 
-        if (isinstance(other,prdataset)):
+        if isinstance(other, prdataset):
             other = other.float()
-        if (isinstance(other,(int,float))):
+        if isinstance(other, (int, float)):
             newd = copy.deepcopy(self)
             newd.data *= other
             return newd
@@ -95,9 +95,9 @@ class prdataset(object):
         #print('   self='+str(self))
         #print('   other='+str(other))
 
-        if (isinstance(other,prdataset)):
+        if isinstance(other, prdataset):
             other = other.float()
-        if (isinstance(other,(int,float))):
+        if isinstance(other, (int, float)):
             newd = copy.deepcopy(self)
             newd.data *= other
             return newd
@@ -105,7 +105,7 @@ class prdataset(object):
             return NotImplemented
     def __div__(self,other):
         newd = copy.deepcopy(self)
-        if (isinstance(other,prdataset)):
+        if isinstance(other, prdataset):
             other = other.float()
         newd.data /= other
         return newd
@@ -119,10 +119,10 @@ class prdataset(object):
         return I
     def signlab(self,posclass=1):  # what is a good default?
         ll = self.lablist()
-        if (len(ll)>2):
+        if len(ll)>2:
             raise ValueError('Labels +-1 only for two-class problems.')
         lab = self.nlab()
-        if (posclass==0):
+        if posclass==0:
             lab = 1-2.0*lab
         else:
             lab = 2.0*lab-1
@@ -173,7 +173,7 @@ class prdataset(object):
         # select rows from targets
         newd.targets = newd.targets[newkey[0]]
         # select rows from targets
-        if (len(newd._targets_)>0):
+        if len(newd._targets_)>0:
             newd._targets_ = newd._targets_[newkey[0],:]
         return newd
     def __setitem__(self,key,item):
@@ -185,7 +185,7 @@ class prdataset(object):
         return newd[I[0],:]   # grr, this python..
 
     def getprior(self):
-        if (len(self.prior)>0):
+        if len(self.prior)>0:
             return self.prior
         sz = self.classsizes()
         return sz/float(numpy.sum(sz))
@@ -199,12 +199,12 @@ class prdataset(object):
 
     def settargets(self,labelname,targets):
         # does the size match?
-        if (len(targets.shape)==1):
+        if len(targets.shape)==1:
             targets = targets[:,numpy.newaxis]
-        if (targets.shape[0] != self.data.shape[0]):
+        if targets.shape[0] != self.data.shape[0]:
             # try transposing:
             targets = targets.transpose()
-            if (targets.shape[0] != self.data.shape[0]):
+            if targets.shape[0] != self.data.shape[0]:
                 raise ValueError("Number of targets does not match number of objects.")
         # does labelname already exist?
         if labelname in self._targetnames_:
@@ -213,7 +213,7 @@ class prdataset(object):
             self._targets_[:,I:(I+1)] = targets
         else:
             # add a new label:
-            if (len(self._targetnames_)>0):
+            if len(self._targetnames_)>0:
                 self._targetnames_.append(labelname)
                 self._targets_ = numpy.append(self._targets_,targets,1)
             else:
@@ -231,7 +231,7 @@ class prdataset(object):
 
     def showtargets(self,I=None):
         if I is None:
-            if (len(self._targetnames_)>0):
+            if len(self._targetnames_)>0:
                 print("This dataset has these targets defined:"),
                 print(self._targetnames_)
             else:
@@ -252,7 +252,7 @@ class prdataset(object):
 def scatterd(a):
     clrs = a.nlab().flatten()
     sz = a.data.shape
-    if (sz[1]>1):
+    if sz[1]>1:
         plt.scatter(a.data[:,0],a.data[:,1],c=clrs)
         ylab = a.featlab[1]
     else:
@@ -266,7 +266,7 @@ def scatterd(a):
 def scatter3d(a):
     clrs = a.nlab().flatten()
     sz = a.data.shape
-    if (sz[1]>2):
+    if sz[1]>2:
         ax = plt.axes(projection='3d')
         ax.scatter3D(a.data[:,0],a.data[:,1],a.data[:,2],c=clrs)
         ylab = a.featlab[1]
@@ -292,12 +292,12 @@ def genclass(n,p):
     if isinstance(n,int):
         n = [n]  # make a list
     n = numpy.asarray(n)
-    if (len(n)>1):
+    if len(n)>1:
         return n
-    if (len(n.shape)>1):
+    if len(n.shape)>1:
         return n
     p = numpy.asarray(p)
-    if (numpy.abs(numpy.sum(p)-1)>1e-9):
+    if numpy.abs(numpy.sum(p) - 1)>1e-9:
         raise ValueError('Probabilities do not add up to 1.')
     c = len(p)
     P = numpy.cumsum(p)
@@ -309,7 +309,7 @@ def genclass(n,p):
     return z
 
 def genlab(n,lab):
-    if (len(n)!=len(lab)):
+    if len(n)!=len(lab):
         raise ValueError('Number of values in N should match number in lab')
     out = numpy.tile(lab[0],[n[0],1])
     for i in range(1,len(n)):
@@ -334,10 +334,10 @@ def gendat(x,n,seed=None):
     # now generate the data:
     i=0  # first class is special:
     x1 = x.seldat(i)
-    if (n[i]==clsz[i]):
+    if n[i]==clsz[i]:
         # take a bootstrap sample:
         I = numpy.random.randint(0,n[i],n[i])
-    elif (n[i]<clsz[i]):
+    elif n[i]<clsz[i]:
         I = numpy.random.permutation(range(clsz[i]))
         I = I[0:int(n[i])]
     else:
@@ -349,10 +349,10 @@ def gendat(x,n,seed=None):
     # now the other classes:
     for i in range(1,nrcl):
         xi = x.seldat(i)
-        if (n[i]==clsz[i]):
+        if n[i]==clsz[i]:
             # take a bootstrap sample:
             I = numpy.random.randint(0,n[i],n[i])
-        elif (n[i]<clsz[i]):
+        elif n[i]<clsz[i]:
             I = numpy.random.permutation(range(clsz[i]))
             I = I[0:int(n[i])]
         else:

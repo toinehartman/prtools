@@ -75,10 +75,10 @@ def scalem(task=None,x=None,w=None):
     """
     if not isinstance(task,str):
         return prmapping(scalem,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Scalem', ()
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         mn = numpy.mean(+x,axis=0)
         sc = numpy.std(+x,axis=0)
@@ -86,7 +86,7 @@ def scalem(task=None,x=None,w=None):
         sc[sc==0.] = 1.
         # return the parameters, and feature labels
         return (mn,sc), x.featlab
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data   # get the parameters out
         x = +x-W[0]
@@ -117,42 +117,42 @@ def proxm(task=None,x=None,w=None):
     if not isinstance(task,str):
         # A direct call to proxm, refer back to prmapping:
         return prmapping(proxm,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparams
         return 'Proxm',x
-    elif (task=="train"):
+    elif task== "train":
         # we only need to store the representation set
-        if (isinstance(x,prdataset)):
+        if isinstance(x, prdataset):
             R = +x
         else:
             R = numpy.copy(x)
-        if (w[0]=='eucl'):
+        if w[0]== 'eucl':
             return ('eucl',R), numpy.arange(R.shape[0])
-        if (w[0]=='city'):
+        if w[0]== 'city':
             return ('city',R), numpy.arange(R.shape[0])
-        elif (w[0]=='rbf'):
+        elif w[0]== 'rbf':
             return ('rbf',R,w[1]), numpy.arange(R.shape[0])
         else:
             raise ValueError('Proxm type not defined')
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data:
         W = w.data
         dat = +x
         n0 = dat.shape[0]
         n1 = W[1].shape[0]
-        if (W[0]=='eucl'):
+        if W[0]== 'eucl':
             D = numpy.zeros((n0,n1))
             for i in range(0,n0):
                 for j in range(0,n1):
                     df = dat[i,:] - W[1][j,:]
                     D[i,j] = numpy.dot(df.T,df)
-        elif (W[0]=='city'):
+        elif W[0]== 'city':
             D = numpy.zeros((n0,n1))
             for i in range(0,n0):
                 for j in range(0,n1):
                     df = dat[i,:] - W[1][j,:]
                     D[i,j] = numpy.sum(numpy.abs(df))
-        elif (W[0]=='rbf'):
+        elif W[0]== 'rbf':
             s = W[2]*W[2]
             D = numpy.zeros((n0,n1))
             for i in range(0,n0):
@@ -191,13 +191,13 @@ def softmax(task=None,x=None,w=None):
         if task is not None:
             out = out(task)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Softmax', ()
-    elif (task=="train"):
+    elif task== "train":
         print("Softmax: We cannot train the softmax mapping.")
         return 0, x.featlab
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         dat = numpy.exp(+x)
         sumx = numpy.sum(dat,axis=1,keepdims=True)
@@ -224,15 +224,15 @@ def classc(task=None,x=None,w=None):
         if task is not None:
             out = out(task)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Classc', ()
-    elif (task=="train"):
+    elif task== "train":
         print("Classc: We cannot train the classc mapping.")
         return 0, x.featlab
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
-        if (numpy.any(+x<0.)):
+        if numpy.any(+x < 0.):
             print('classc(): Suspicious negative values in Classc.')
         sumx = numpy.sum(+x,axis=1,keepdims=True)
         x.setdata( +x/sumx )
@@ -262,13 +262,13 @@ def labeld(task=None,x=None,w=None):
         if task is not None:
             out = out(task)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Labeld', ()
-    elif (task=="train"):
+    elif task== "train":
         print("Labeld: We cannot train the label mapping.")
         return 0, x.featlab
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         I = numpy.argmax(+x,axis=1)
         n = x.shape[0]
@@ -302,13 +302,13 @@ def testc(task=None,x=None,w=None):
         if task is not None:
             out = out(task)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Test classifier', ()
-    elif (task=="train"):
+    elif task== "train":
         # nothing to train
         return None,0
-    elif (task=="eval"):
+    elif task== "eval":
         # we are classifying new data
         err = (labeld(x) != x.targets)*1.
         w = x.gettargets('weights')
@@ -337,14 +337,14 @@ def mclassc(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(mclassc,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if isinstance(x,prmapping):
             name = 'Multiclass '+x.name
         else:
             name = 'Multiclass'
         return name, x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         c = x.nrclasses()
         lablist = x.lablist()
@@ -358,7 +358,7 @@ def mclassc(task=None,x=None,w=None):
             f.append(u.train(x))
         # store the parameters, and labels:
         return f,lablist
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         c = len(W)
@@ -391,17 +391,17 @@ def bayesrule(task=None,x=None,w=None):
         out = prmapping(bayesrule)
         out.mapping_type = "trained"
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Bayes rule', ()
-    elif (task=="train"):
+    elif task== "train":
         # nothing to train
         return None,()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are classifying new data
         if not isinstance(x,prdataset):
             x = prdataset(x)
-        if (len(x.prior)>0):
+        if len(x.prior)>0:
             dat = x.data*x.prior
         else:
             dat = x.data
@@ -437,12 +437,12 @@ def gaussm(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(gaussm,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = ('full',[0.])
         return 'Gaussian density', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         c = x.nrclasses()
         dim = x.shape[1]
@@ -457,13 +457,13 @@ def gaussm(task=None,x=None,w=None):
             mn[i,:] = numpy.mean(+xi,axis=0)
             cv[i,:,:] = numpy.cov(+xi,rowvar=False)
         # depending of the type, we have to treat the cov's:
-        if (w[0]=='full'):
+        if w[0]== 'full':
             for i in range(c):
                 # regularise
                 cv[i,:,:] += w[1]*numpy.eye(dim)
                 icov[i,:,:] = numpy.linalg.inv(cv[i,:,:])
                 Z[i] = numpy.sqrt(numpy.linalg.det(cv[i,:,:])*(2*numpy.pi)**dim)
-        elif (w[0]=='meancov'):
+        elif w[0]== 'meancov':
             meancov = numpy.average(cv,axis=0,weights=prior) + w[1]*numpy.eye(dim)
             meanZ = numpy.sqrt(numpy.linalg.det(meancov)*(2*numpy.pi)**dim)
             meanicov = numpy.linalg.inv(meancov)
@@ -474,11 +474,11 @@ def gaussm(task=None,x=None,w=None):
             raise ValueError('This cov.mat is *not* defined for gaussm.')
         # store the parameters, and labels:
         return (prior,mn,icov,Z),x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         X = +x
         n = X.shape[0]
-        if (len(X.shape)>1):
+        if len(X.shape)>1:
             dim = len(X.shape)
         else:
             dim = 1
@@ -487,7 +487,7 @@ def gaussm(task=None,x=None,w=None):
         out = numpy.zeros((n,c))
         for i in range(c):
             df = X - W[1][i,:]
-            if (dim>1):
+            if dim>1:
                 out[:,i] = numpy.sum(numpy.dot(df,W[2][i,:,:])*df,axis=1)
             else:
                 out[:,i] = numpy.dot(df,W[2][i,:,:])*df
@@ -525,10 +525,10 @@ def nmc(task=None,x=None,w=None):
     "Nearest mean classifier"
     if not isinstance(task,str):
         return prmapping(nmc,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Nearest mean', ()
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         c = x.nrclasses()
         mn = numpy.zeros((c,x.shape[1]))
@@ -537,7 +537,7 @@ def nmc(task=None,x=None,w=None):
             mn[i,:] = numpy.mean(+xi,axis=0)
         # store the parameters, and labels:
         return mn,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         return -sqeucldist(+x,w.data)
     else:
@@ -549,14 +549,14 @@ def fisherc(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(fisherc,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Fisher', ()
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         c = x.nrclasses()
         dim = x.shape[1]
-        if (c>2):
+        if c>2:
             raise ValueError('Fisher classifier is defined for two classes.')
         mn = numpy.zeros((c,dim))
         cv = numpy.zeros((dim,dim))
@@ -576,15 +576,15 @@ def fisherc(task=None,x=None,w=None):
         #v = numpy.linalg.pinv(cv).dot(mn[1,:]-mn[0,:])
         # store the parameters, and labels:
         return (v,v0),x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         X = +x
         out = X.dot(W[0]) - W[1]
-        if (len(out.shape)<2):  # This numpy/python stuff is pathetic
+        if len(out.shape)<2:  # This numpy/python stuff is pathetic
             out = out[:,numpy.newaxis]
         gr = numpy.hstack((-out,out))
-        if (len(gr.shape)<2):
+        if len(gr.shape)<2:
             gr = gr[numpy.newaxis,:]
         return gr
     else:
@@ -595,18 +595,18 @@ def knnm(task=None,x=None,w=None):
     "k-Nearest neighbor classifier"
     if not isinstance(task,str):
         return prmapping(knnm,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = [1]
         if (type(x) is float) or (type(x) is int):
             x = [x]
         return 'k-Nearest neighbor', x
-    elif (task=="train"):
+    elif task== "train":
         # we only need to store the data
         # store the parameters, and labels:
         return x,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         nrcl = len(w.targets)
@@ -637,18 +637,18 @@ def parzenm(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(parzenm,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = [1]
         if (type(x) is float) or (type(x) is int):
             x = [x]
         return 'Parzen density', x
-    elif (task=="train"):
+    elif task== "train":
         # we only need to store the data
         # store the parameters, and labels:
         return x,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         nrcl = len(w.targets)
@@ -672,12 +672,12 @@ def naivebm(task=None,x=None,w=None):
     "Naive Bayes density estimate"
     if not isinstance(task,str):
         return prmapping(naivebm,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = [gaussm()]
         return 'Naive Bayes density', x
-    elif (task=="train"):
+    elif task== "train":
         # we only to estimate the densities for each feature:
         c = x.shape[1]
         f = []
@@ -686,7 +686,7 @@ def naivebm(task=None,x=None,w=None):
             f.append(x[:,i:(i+1)]*u)
         # store the parameters, and labels:
         return f,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         nrcl = len(w.targets)
@@ -731,19 +731,19 @@ def mog(task=None,x=None,w=None):
     """
     if not isinstance(task,str):
         return prmapping(mog,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = (3,'full',0.01)  # default: k=3, full cov., small reg.
         return 'mog', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         # some basic checking:
         n,dim = x.shape
         k = w[0]
         ctype = w[1]
         reg = w[2]
-        if (k>n):
+        if k>n:
             raise ValueError('More clusters than datapoints requested.')
         # some basic inits:
         nriters = 100  #DXD
@@ -768,7 +768,7 @@ def mog(task=None,x=None,w=None):
             for i in range(k):
                 df = +x - mn[i,:]
                 icv = numpy.linalg.inv(cv[:,:,i])
-                if (dim>1):
+                if dim>1:
                     P[:,i] = numpy.sum(numpy.dot(df,icv)*df,axis=1)
                 else:
                     P[:,i] = numpy.dot(df,icv)*df
@@ -790,9 +790,9 @@ def mog(task=None,x=None,w=None):
                 df = +x - mn[i,:]
                 cv[:,:,i] = numpy.dot(df.T,df*gamma) / Nk[i] \
                         + reg*numpy.diag(numpy.ones((dim,1)))
-                if (ctype=='diag'):
+                if ctype== 'diag':
                     cv[:,:,i] = numpy.diag(numpy.diag(cv[:,:,i]))
-                elif (ctype=='sphr'):
+                elif ctype== 'sphr':
                     s = numpy.mean(numpy.diag(cv[:,:,i]))
                     cv[:,:,i] = s * numpy.diagflat(numpy.ones((dim,1)))
                 pr[i] = Nk[i]/n
@@ -806,7 +806,7 @@ def mog(task=None,x=None,w=None):
 
         # return the parameters, and feature labels
         return (pr,mn,cv,Z), range(k)  # output p(x|k) per component
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data   # get the parameters out
         n,dim = x.shape
@@ -814,7 +814,7 @@ def mog(task=None,x=None,w=None):
         out = numpy.zeros((n,k))
         for i in range(k):
             df = +x - W[1][i,:]
-            if (dim>1):
+            if dim>1:
                 out[:,i] = numpy.sum(numpy.dot(df,W[2][:,:,i])*df,axis=1)
             else:
                 out[:,i] = numpy.dot(df,W[2][:,:,i])*df
@@ -849,12 +849,12 @@ def mogm(task=None,x=None,w=None):
     """
     if not isinstance(task,str):
         return prmapping(mogm,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = (2,'full',0.01)  # default: k=3, full cov., small reg.
         return 'mogm', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         # Train a mapping per class:
         c = x.nrclasses()
@@ -865,7 +865,7 @@ def mogm(task=None,x=None,w=None):
 
         # return the parameters, and feature labels
         return g, x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data   # get the parameters out
         n,dim = x.shape
@@ -908,12 +908,12 @@ def baggingc(task=None,x=None,w=None):
     "Bagging"
     if not isinstance(task,str):
         return prmapping(baggingc,task,x)
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = (nmc,100)
         return 'Baggingc', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         clsz = x.classsizes()
         f = []
@@ -923,8 +923,8 @@ def baggingc(task=None,x=None,w=None):
             u = copy.deepcopy(w[0])
             f.append(u(xtr))
         # store the parameters, and labels:
-        return (f),x.lablist()
-    elif (task=="eval"):
+        return f, x.lablist()
+    elif task== "eval":
         # we are applying to new data
         X = +x
         n = X.shape[0]
@@ -948,17 +948,17 @@ def stumpc(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(stumpc,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Decision stump', ()
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
-        if (x.nrclasses() != 2):
+        if x.nrclasses() != 2:
             raise ValueError('Stumpc can only deal with 2 classes.')
         # allow weights:
         n,dim = x.shape
         w = x.gettargets('weights')
-        if (len(w)==0):
+        if len(w)==0:
             w = numpy.ones((n,1))
         w /= numpy.sum(w)
         # initialise:
@@ -975,12 +975,12 @@ def stumpc(task=None,x=None,w=None):
             sortlab = wy[I]
             sumlab = numpy.cumsum(numpy.vstack((Nmin,sortlab)))
             J = numpy.argmin(sumlab)
-            if (sumlab[J]<besterr):
+            if sumlab[J]<besterr:
                 besterr = sumlab[J]
                 bestfeat = f
-                if (J==0):
+                if J==0:
                     bestthres = X[0,f] - 1e-6
-                elif (J==n):
+                elif J==n:
                     bestthres = X[n,f] + 1e-6
                 else:
                     bestthres = (X[I[J],f]+X[I[J-1],f])/2.
@@ -988,12 +988,12 @@ def stumpc(task=None,x=None,w=None):
                 bestsign = +1
             sumlab = numpy.cumsum(numpy.vstack((Nplus,-sortlab)))
             J = numpy.argmin(sumlab)
-            if (sumlab[J]<besterr):
+            if sumlab[J]<besterr:
                 besterr = sumlab[J]
                 bestfeat = f
-                if (J==0):
+                if J==0:
                     bestthres = X[0,f] - 1e-6
-                elif (J==n):
+                elif J==n:
                     bestthres = X[n-1,f] + 1e-6
                 else:
                     bestthres = (X[I[J],f]+X[I[J-1],f])/2.
@@ -1005,16 +1005,16 @@ def stumpc(task=None,x=None,w=None):
         #print x.lablist()
         ll = x.lablist()
         return (bestfeat,bestthres,bestsign),ll
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         X = +x
-        if (W[2]>0):
+        if W[2]>0:
             out = (X[:,int(W[0])] >= W[1])*1.
         else:
             out = (X[:,int(W[0])] < W[1])*1.
         # How the F*** can I force numpy to behave?!:
-        if (len(out.shape)==1):
+        if len(out.shape)==1:
             out = out[:,numpy.newaxis]
         if (x.shape[0]>1) and (out.shape[0]==1):
             out = out[:,numpy.newaxis]  # GRRR
@@ -1031,12 +1031,12 @@ def adaboostc(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(adaboostc,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = [100]
         return 'AdaBoost', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         # setup vars
         T = w[0]
@@ -1060,7 +1060,7 @@ def adaboostc(task=None,x=None,w=None):
             pred = 2*pred[:,:1]-1
             err = numpy.sum(w*(pred!=y))
             #print('Error is %f' % err)
-            if (err==0):
+            if err==0:
                 print("Stop it!")
                 perfecth = h[t,:]
                 return (perfecth,1.),x.lablist()
@@ -1069,7 +1069,7 @@ def adaboostc(task=None,x=None,w=None):
 
         # store the parameters, and labels:
         return (h,alpha),x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         N = x.shape[0]
@@ -1109,7 +1109,7 @@ def svc(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(svc,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             kernel = 'rbf'
@@ -1128,18 +1128,18 @@ def svc(task=None,x=None,w=None):
             print("Supplied kernel is unknown, use RBF instead.")
             clf = svm.SVC(kernel='rbf',gamma=x,C=C,probability=True)
         return 'Support vector classifier', clf
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         X = +x
         y = numpy.ravel(x.targets)
         clf = copy.deepcopy(w)
         clf.fit(X,y)
         return clf,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         clf = w.data
         pred = clf.decision_function(+x)
-        if (len(pred.shape)==1): # oh boy oh boy, we are in trouble
+        if len(pred.shape)==1: # oh boy oh boy, we are in trouble
             pred = pred[:,numpy.newaxis]
             pred = numpy.hstack((-pred,pred)) # sigh
         return pred
@@ -1163,7 +1163,7 @@ def loglc(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(loglc,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             C = numpy.inf
@@ -1171,18 +1171,18 @@ def loglc(task=None,x=None,w=None):
             C = 1./x
         clf = linear_model.LogisticRegression(C=C,penalty='l2',tol=0.01,solver='saga')
         return 'Logistic classifier', clf
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         X = +x
         y = numpy.ravel(x.targets)
         clf = copy.deepcopy(w)
         clf.fit(X,y)
         return clf,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         clf = w.data
         pred = clf.decision_function(+x)
-        if (len(pred.shape)==1): # oh boy oh boy, we are in trouble
+        if len(pred.shape)==1: # oh boy oh boy, we are in trouble
             pred = pred[:,numpy.newaxis]
             pred = numpy.hstack((-pred,pred)) # sigh
         return pred
@@ -1195,7 +1195,7 @@ def dectreec(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(dectreec,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             max_d = None
@@ -1203,18 +1203,18 @@ def dectreec(task=None,x=None,w=None):
             max_d = x[0]
         clf = tree.DecisionTreeClassifier(max_depth=max_d)
         return 'Decision tree', clf
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         X = +x
         y = numpy.ravel(x.targets)
         clf = copy.deepcopy(w)
         clf.fit(X,y)
         return clf,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         clf = w.data
         pred = clf.predict_proba(+x)
-        if (len(pred.shape)==1): # oh boy oh boy, we are in trouble
+        if len(pred.shape)==1: # oh boy oh boy, we are in trouble
             pred = pred[:,numpy.newaxis]
             pred = numpy.hstack((-pred,pred)) # sigh
         return pred
@@ -1238,7 +1238,7 @@ def lassoc(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(lassoc,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             alpha = 0.
@@ -1246,18 +1246,18 @@ def lassoc(task=None,x=None,w=None):
             alpha = x
         clf = linear_model.Lasso(alpha=alpha,normalize=False,tol=0.0001)
         return 'LASSO classifier', clf
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         X = +x
         y = numpy.ravel(x.targets)
         clf = copy.deepcopy(w)
         clf.fit(X,y)
         return clf,x.lablist()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         clf = w.data
         pred = clf.predict(+x)
-        if (len(pred.shape)==1): # oh boy oh boy, we are in trouble
+        if len(pred.shape)==1: # oh boy oh boy, we are in trouble
             pred = pred[:,numpy.newaxis]
             pred = numpy.hstack((-pred,pred)) # sigh
         return pred
@@ -1270,14 +1270,14 @@ def pcam(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(pcam,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'PCA', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         if w is None: # no dimensionality given: use all
             pcadim = x.shape[1]
-        elif (w<1):
+        elif w<1:
             pcadim = int(w*x.shape[1])
         else:
             pcadim = w
@@ -1293,7 +1293,7 @@ def pcam(task=None,x=None,w=None):
         featlab = range(pcadim)
         # store the parameters, and labels:
         return v,featlab
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         dat = +x
         return dat.dot(w.data)
@@ -1304,7 +1304,7 @@ def pcam(task=None,x=None,w=None):
 def sqeucldist(a,b):
     n0,dim = a.shape
     n1,dim1 = b.shape
-    if (dim!=dim1):
+    if dim!=dim1:
         raise ValueError('Dimensions do not match.')
     D = numpy.zeros((n0,n1))
     for i in range(0,n0):
@@ -1316,10 +1316,10 @@ def sqeucldist(a,b):
 def prcrossval(a,u,k=10,nrrep=1,testfunc=testc):
     n = a.shape[0]
     c = a.nrclasses()
-    if (nrrep==1):
+    if nrrep==1:
         # check:
         clsz = a.classsizes()
-        if (min(clsz)<k):
+        if min(clsz)<k:
             raise ValueError('Some classes are too small for the number of folds.')
         # randomize the data
         I = numpy.random.permutation(range(n))
@@ -1350,7 +1350,7 @@ def cleval(a, u, trainsize=None, nrreps=3, testfunc=testc):
         trainsize = [2, 3, 5, 10, 20, 30]
     nrcl = a.nrclasses()
     clsz = a.classsizes()
-    if (numpy.max(trainsize)>=numpy.min(clsz)):
+    if numpy.max(trainsize)>=numpy.min(clsz):
         raise ValueError('Not enough objects per class available.')
     N = len(trainsize)
     err = numpy.zeros((N,nrreps))
@@ -1404,15 +1404,15 @@ def vandermondem(task=None,x=None,w=None):
         if isinstance(task,prdataset):
             out = out(task)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = 1
         return 'Vandermonde', x
-    elif (task=="train"):
+    elif task== "train":
         # nothing to train for a fixed mapping
         return None,()
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         n = x.shape[0]
         XX = +x
@@ -1430,12 +1430,12 @@ def linearr(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(linearr,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = 1
         return 'Ordinary least squares', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         n,dim = x.shape
         dat = +vandermondem(x,w)
@@ -1443,7 +1443,7 @@ def linearr(task=None,x=None,w=None):
         beta = Sinv.dot(dat.T).dot(x.targets)
         # store the parameters, and labels:
         return beta,['target']
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         dat = +vandermondem(prdataset(x),w.hyperparam)
         return dat.dot(w.data)
@@ -1456,12 +1456,12 @@ def ridger(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(ridger,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = 0.
         return 'Ridge regression', x
-    elif (task=="train"):
+    elif task== "train":
         # we are going to train the mapping
         n,dim = x.shape
         dat = numpy.hstack((+x,numpy.ones((n,1))))
@@ -1469,7 +1469,7 @@ def ridger(task=None,x=None,w=None):
         beta = Sinv.dot(dat.T).dot(x.targets)
         # store the parameters, and labels:
         return beta,['target']
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         n = x.shape[0]
         dat = numpy.hstack((+x,numpy.ones((n,1))))
@@ -1483,15 +1483,15 @@ def kernelr(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(kernelr,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = 1.
         return 'Kernel regression', x
-    elif (task=="train"):
+    elif task== "train":
         # we only need to store the data
         return (+x,x.targets),['target']
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         W = w.data
         X = W[0]
@@ -1510,20 +1510,20 @@ def lassor(task=None,x=None,w=None):
     if not isinstance(task,str):
         out = prmapping(lassor,task,x)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         if x is None:
             x = 1.
         # use the sklearn implementation:
         regr = linear_model.Lasso(alpha=x)
         return 'LASSO regression', regr
-    elif (task=="train"):
+    elif task== "train":
         X = +x
         y = x.targets
         regr = copy.deepcopy(w)
         regr.fit(X,y)
         return regr,['target']
-    elif (task=="eval"):
+    elif task== "eval":
         # we are applying to new data
         regr = w.data
         out = regr.predict(+x)
@@ -1541,13 +1541,13 @@ def testr(task=None,x=None,w=None):
         if task is not None:
             out = out(task)
         return out
-    if (task=='untrained'):
+    if task== 'untrained':
         # just return the name, and hyperparameters
         return 'Test regressor', ()
-    elif (task=="train"):
+    elif task== "train":
         # nothing to train
         return None,0
-    elif (task=="eval"):
+    elif task== "eval":
         # we are comparing the output with the targets
         err = (+x - x.targets)**2.
         w = x.gettargets('weights')
@@ -1561,7 +1561,7 @@ def testr(task=None,x=None,w=None):
 def hclust(D,ctype='s',k=0):
     D = +D
     sz = numpy.shape(D)
-    if (sz[0]!=sz[1]):
+    if sz[0]!=sz[1]:
         raise ValueError('Distance matrix should be square.')
     return 0
 
@@ -1643,7 +1643,7 @@ def gendatc(n=(50,50),dim=2,mu=0.):
     x0[:,0] += mu
     x1 = numpy.random.randn(N[1],dim)
     x1[:,0] *= 3.
-    if (dim>1):
+    if dim>1:
         x1[:,1] *= 3.
 
     x = numpy.concatenate((x0,x1),axis=0)
