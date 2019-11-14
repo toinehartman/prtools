@@ -747,7 +747,7 @@ def mog(task=None,x=None,w=None):
             raise ValueError('More clusters than datapoints requested.')
         # some basic inits:
         nriters = 100  #DXD
-        iter = 0
+        iteration = 0
         LL1 = -2e6
         LL2 = -1e6
         # initialize the priors, means, cov. matrices
@@ -762,7 +762,7 @@ def mog(task=None,x=None,w=None):
             cv[:,:,i] = numpy.eye(dim)*covwidth*largeval
         # now run the iterations
         P = numpy.zeros((n,k))
-        while (abs(LL2/LL1 - 1.)>1e-6) and (iter<nriters):
+        while (abs(LL2/LL1 - 1.)>1e-6) and (iteration < nriters):
             #print("Iteration %d:"%iter)
             # compute densities
             for i in range(k):
@@ -775,7 +775,7 @@ def mog(task=None,x=None,w=None):
                 P[:,i] = pr[i]*iZ* numpy.exp(-P[:,i]/2.)\
                         *numpy.sqrt(numpy.linalg.det(icv))
             # next iteration
-            iter += 1
+            iteration += 1
             LL2 = LL1
             LL1 = numpy.sum(numpy.log(numpy.sum(P,axis=1)))
             # compute responsibilities
