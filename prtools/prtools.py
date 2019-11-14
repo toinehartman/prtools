@@ -1560,7 +1560,7 @@ def testr(task=None,x=None,w=None):
 
 def hclust(D,ctype='s',k=0):
     D = +D
-    sz = shape(D)
+    sz = numpy.shape(D)
     if (sz[0]!=sz[1]):
         raise ValueError('Distance matrix should be square.')
     return 0
