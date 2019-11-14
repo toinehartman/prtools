@@ -129,7 +129,6 @@ class prmapping(object):
         else:
             print(self.mapping_type)
             raise ValueError('Mapping type is not defined.')
-        return 
 
     def __mul__(self,other):
         #print('prmapping multiplication with right')
