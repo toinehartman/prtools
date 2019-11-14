@@ -14,7 +14,7 @@ from .dataset import prdataset
 
 # === prmapping ============================================
 class prmapping(object):
-    "Prmapping in Python"
+    """Prmapping in Python"""
 
     def __init__(self, mapping_func, x=None, hyperp=None):
         # exception: when only hyperp are given
@@ -159,7 +159,7 @@ class prmapping(object):
 
 
 def sequentialm(task=None,x=None,w=None):
-    "Sequential mapping"
+    """Sequential mapping"""
     if not isinstance(task,str):
         # we should have gotten a list of two prmappings
         if not isinstance(task,tuple):

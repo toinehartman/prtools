@@ -522,7 +522,7 @@ def qdc(task=None,x=None,w=None):
     return u
 
 def nmc(task=None,x=None,w=None):
-    "Nearest mean classifier"
+    """Nearest mean classifier"""
     if not isinstance(task,str):
         return prmapping(nmc,task,x)
     if task== 'untrained':
@@ -545,7 +545,7 @@ def nmc(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for nmc.')
 
 def fisherc(task=None,x=None,w=None):
-    "Fisher classifier"
+    """Fisher classifier"""
     if not isinstance(task,str):
         out = prmapping(fisherc,task,x)
         return out
@@ -592,7 +592,7 @@ def fisherc(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for fisherc.')
 
 def knnm(task=None,x=None,w=None):
-    "k-Nearest neighbor classifier"
+    """k-Nearest neighbor classifier"""
     if not isinstance(task,str):
         return prmapping(knnm,task,x)
     if task== 'untrained':
@@ -669,7 +669,7 @@ def parzenc(task=None,x=None,w=None):
     return parzenm(task,x,w)*bayesrule()
 
 def naivebm(task=None,x=None,w=None):
-    "Naive Bayes density estimate"
+    """Naive Bayes density estimate"""
     if not isinstance(task,str):
         return prmapping(naivebm,task,x)
     if task== 'untrained':
@@ -905,7 +905,7 @@ def mogc(task=None,x=None,w=None):
     return mogm(task,x,w)*bayesrule()
 
 def baggingc(task=None,x=None,w=None):
-    "Bagging"
+    """Bagging"""
     if not isinstance(task,str):
         return prmapping(baggingc,task,x)
     if task== 'untrained':
@@ -944,7 +944,7 @@ def baggingc(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for baggingc.')
 
 def stumpc(task=None,x=None,w=None):
-    "Decision stump classifier"
+    """Decision stump classifier"""
     if not isinstance(task,str):
         out = prmapping(stumpc,task,x)
         return out
@@ -1027,7 +1027,7 @@ def stumpc(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for stumpc.')
 
 def adaboostc(task=None,x=None,w=None):
-    "AdaBoost classifier"
+    """AdaBoost classifier"""
     if not isinstance(task,str):
         out = prmapping(adaboostc,task,x)
         return out
@@ -1191,7 +1191,7 @@ def loglc(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for loglc.')
 
 def dectreec(task=None,x=None,w=None):
-    "Decision tree classifier"
+    """Decision tree classifier"""
     if not isinstance(task,str):
         out = prmapping(dectreec,task,x)
         return out
@@ -1266,7 +1266,7 @@ def lassoc(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for lassoc.')
 
 def pcam(task=None,x=None,w=None):
-    "Principal Component Analysis "
+    """Principal Component Analysis """
     if not isinstance(task,str):
         out = prmapping(pcam,task,x)
         return out
@@ -1397,7 +1397,7 @@ def clevalf(a,u,trainsize=0.6,nrreps=5,testfunc=testc):
     return err, err_app
 
 def vandermondem(task=None,x=None,w=None):
-    "Vandermonde Matrix"
+    """Vandermonde Matrix"""
     if not isinstance(task,str):
         out = prmapping(vandermondem,task,x)
         out.mapping_type = "trained"
@@ -1426,7 +1426,7 @@ def vandermondem(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for vandermondem.')
 
 def linearr(task=None,x=None,w=None):
-    "Linear regression"
+    """Linear regression"""
     if not isinstance(task,str):
         out = prmapping(linearr,task,x)
         return out
@@ -1452,7 +1452,7 @@ def linearr(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for linearr.')
 
 def ridger(task=None,x=None,w=None):
-    "Ridge regression"
+    """Ridge regression"""
     if not isinstance(task,str):
         out = prmapping(ridger,task,x)
         return out
@@ -1479,7 +1479,7 @@ def ridger(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for ridger.')
 
 def kernelr(task=None,x=None,w=None):
-    "Kernel regression"
+    """Kernel regression"""
     if not isinstance(task,str):
         out = prmapping(kernelr,task,x)
         return out
@@ -1506,7 +1506,7 @@ def kernelr(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for kernelr.')
 
 def lassor(task=None,x=None,w=None):
-    "LASSO regression"
+    """LASSO regression"""
     if not isinstance(task,str):
         out = prmapping(lassor,task,x)
         return out
@@ -1534,7 +1534,7 @@ def lassor(task=None,x=None,w=None):
         raise ValueError('This task is *not* defined for lassor.')
 
 def testr(task=None,x=None,w=None):
-    "Test regressor"
+    """Test regressor"""
     if not isinstance(task,str):
         out = prmapping(testr)
         out.mapping_type = "trained"

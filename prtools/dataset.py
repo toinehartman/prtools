@@ -12,7 +12,7 @@ import numpy
 
 # === prdataset ============================================
 class prdataset(object):
-    "Prdataset in python"
+    """Prdataset in python"""
 
     def __init__(self,data,targets=None):
         if isinstance(data,prdataset):
@@ -288,7 +288,7 @@ def scatterr(a):
 
 # === datasets ===============================
 def genclass(n,p):
-    "Generate class frequency distribution"
+    """Generate class frequency distribution"""
     if isinstance(n,int):
         n = [n]  # make a list
     n = numpy.asarray(n)
